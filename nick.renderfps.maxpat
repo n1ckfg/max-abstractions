@@ -8,7 +8,7 @@
 			"architecture" : "x86"
 		}
 ,
-		"rect" : [ 470.0, 214.0, 640.0, 531.0 ],
+		"rect" : [ 590.0, 320.0, 640.0, 531.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -31,11 +31,11 @@
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
-					"id" : "obj-2",
+					"id" : "obj-4",
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 0,
-					"patching_rect" : [ 368.0, 54.0, 85.0, 20.0 ],
+					"patching_rect" : [ 383.0, 69.0, 85.0, 20.0 ],
 					"text" : "nick.loadbang"
 				}
 
@@ -44,12 +44,26 @@
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
-					"id" : "obj-6",
+					"id" : "obj-5",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"patching_rect" : [ 108.0, 95.0, 57.0, 20.0 ],
+					"text" : "route fps"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-2",
 					"maxclass" : "newobj",
 					"numinlets" : 2,
 					"numoutlets" : 0,
-					"patching_rect" : [ 211.0, 54.0, 66.0, 20.0 ],
-					"text" : "nick.metro"
+					"patching_rect" : [ 84.0, 222.0, 51.0, 20.0 ],
+					"text" : "nick.fps"
 				}
 
 			}
@@ -73,7 +87,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 116.0, 161.0, 114.0, 20.0 ],
+					"patching_rect" : [ 191.0, 243.0, 114.0, 20.0 ],
 					"text" : "nick.render-window"
 				}
 
@@ -81,10 +95,28 @@
  ],
 		"lines" : [ 			{
 				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
+					"destination" : [ "obj-5", 0 ],
 					"disabled" : 0,
 					"hidden" : 0,
 					"source" : [ "obj-3", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-1", 0 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-5", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-2", 0 ],
+					"disabled" : 0,
+					"hidden" : 0,
+					"source" : [ "obj-5", 0 ]
 				}
 
 			}
@@ -118,7 +150,7 @@
 				"implicit" : 1
 			}
 , 			{
-				"name" : "nick.metro.maxpat",
+				"name" : "nick.fps.maxpat",
 				"bootpath" : "/Users/nick/Development/Max/abstractions",
 				"patcherrelativepath" : ".",
 				"type" : "JSON",
