@@ -5,10 +5,10 @@
 			"major" : 6,
 			"minor" : 1,
 			"revision" : 10,
-			"architecture" : "x86"
+			"architecture" : "x64"
 		}
 ,
-		"rect" : [ 129.0, 396.0, 823.0, 480.0 ],
+		"rect" : [ 335.0, 313.0, 823.0, 480.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -295,7 +295,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 2,
 					"outlettype" : [ "jit_matrix", "" ],
-					"patching_rect" : [ 451.0, 331.0, 49.0, 17.0 ],
+					"patching_rect" : [ 453.0, 343.0, 49.0, 17.0 ],
 					"text" : "jit.eclipse"
 				}
 
@@ -331,7 +331,7 @@
 					"maxclass" : "inlet",
 					"numinlets" : 0,
 					"numoutlets" : 1,
-					"outlettype" : [ "int" ],
+					"outlettype" : [ "jit_gl_texture" ],
 					"patching_rect" : [ 171.0, 61.0, 25.0, 25.0 ]
 				}
 
