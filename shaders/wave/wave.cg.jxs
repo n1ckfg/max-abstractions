@@ -1,0 +1,60 @@
+<jittershader name="wave">
+     
+    <param name="modelViewProj" type="float4x4" state="MODELVIEW_PROJECTION_MATRIX" transform="IDENTITY"/>
+    <param name="colorValue" type="float4" default="1. 1. 0. 1."/>
+    <param name="posXDiv" type="float" default="5.0"/>
+    <param name="posZDiv" type="float" default="4.0"/>
+    <language name="cg" version="1.0">
+        <bind param="modelViewProj" program="vp"/>
+        <bind param="colorValue" program="fp"/>
+        <bind param="posXDiv" program="vp"/>
+        <bind param="posZDiv" program="vp"/>
+     
+        <program name="vp" type="vertex" entry="VS">
+<![CDATA[
+void VS(
+    in float4 position : POSITION,
+    in float4 color : COLOR0,
+    in float4 wave : COLOR1,
+     
+    out float4 HPos : POSITION,
+    out float4 Col0 : COLOR0,
+     
+    uniform float4x4 modelViewProj,
+    uniform float posXDiv,
+    uniform float posZDiv
+)
+{
+    position.y = ( sin(wave.x + (position.x / posXDiv) ) + sin(wave.x + (position.z / posZDiv) ) ) * 2.5f;
+     
+    HPos = mul(modelViewProj, position);
+ 
+    Col0.xyz = color.xyz;
+ 
+}
+     
+]]>
+ 
+        </program>
+         
+         
+        <program name="fp" type="fragment" entry="PS">
+<![CDATA[
+void PS(
+    in float3 position : POSITION,
+     
+    out float4 color : COLOR0,
+     
+    uniform float4 colorValue)
+{
+ 
+    color = colorValue;
+}
+ 
+]]>
+        </program>
+     
+     
+ 
+    </language>
+</jittershader>

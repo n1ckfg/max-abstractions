@@ -1,0 +1,128 @@
+<jittershader name="ascii_shader">
+	<description>
+	Good ol' ASCII Shader, developed by David Scharf ( dave@huesforalice.com ) for Karl Kliem / Dienststelle
+	</description>
+	<param name="dotdistance" type="float" default="4.0">
+		<description>Distance of the ascii dots</description>
+	</param>
+	<param name="tex0" type="int" default="0" > 
+			<description>Your Input Picture</description>
+	</param>
+	<param name="tex1" type="int" default="1" > 
+			<description>Type Texture</description>
+	</param>
+	<param name="invert" type="int" default="0" > 
+			<description>Invert Flag</description>
+	</param>
+	<param name="imagegain" type="float" default="0.0" > 
+			<description>Preprocessing Gain Value </description>
+	</param>
+	<param name="imagecontrast" type="float" default="0.5" >
+			<description>Preprocessing Contrast Value</description>
+	</param>
+	<language name="glsl" version="1.0">			
+		<bind param="tex0" program="fp" /> 
+		<bind param="tex1" program="fp" />
+		<bind param="invert" program="fp" /> 
+		<bind param="imagegain" program="fp" /> 
+		<bind param="imagecontrast" program="fp" /> 
+		<bind param="dotdistance" program="fp" />
+		<program name="vp" type="vertex">
+
+<![CDATA[
+
+varying vec2 texcoord0;
+varying vec2 texcoord1;
+varying vec2 texcoord2;
+varying vec2 texcoord3;
+varying vec2 texcoord4;
+varying vec2 texcoord5;
+varying vec2 texcoord6;
+varying vec2 texcoord7;
+
+//Passthru vertex Shader
+void main()
+{
+	// perform standard transform on vertex
+	gl_Position = ftransform();
+    
+	// transform texcoords
+	texcoord0 = vec2(gl_TextureMatrix[0] * gl_MultiTexCoord0);
+	texcoord1 = vec2(gl_TextureMatrix[1] * gl_MultiTexCoord1);
+	texcoord2 = vec2(gl_TextureMatrix[2] * gl_MultiTexCoord2);
+	texcoord3 = vec2(gl_TextureMatrix[3] * gl_MultiTexCoord3);
+	texcoord4 = vec2(gl_TextureMatrix[4] * gl_MultiTexCoord4);
+	texcoord5 = vec2(gl_TextureMatrix[5] * gl_MultiTexCoord5);
+	texcoord6 = vec2(gl_TextureMatrix[6] * gl_MultiTexCoord6);
+	texcoord7 = vec2(gl_TextureMatrix[7] * gl_MultiTexCoord7);
+}
+]]>
+</program>
+
+		<program name="fp" type="fragment">
+<![CDATA[
+
+uniform sampler2DRect tex0;
+uniform sampler2DRect tex1;
+
+varying vec2 texcoord0;
+varying vec2 texcoord1;
+
+uniform float imagegain;
+uniform float imagecontrast;
+
+uniform int invert;
+
+uniform float dotdistance;
+
+float dotdistanceX = dotdistance * 2.0;
+float dotdistanceY = dotdistance * 1.0;
+
+float halfdistanceX = dotdistanceX / 2.0;
+float halfdistanceY = dotdistanceY / 2.0;
+
+float quaterdistanceX = dotdistanceX / 4.0;
+float quaterdistanceY = dotdistanceY / 4.0;
+
+
+float contrast = ( imagecontrast * 2. )* ( imagecontrast * 2. ) * ( imagecontrast * 2. ) * ( imagecontrast * 2. );
+float gain = imagegain - (imagecontrast -0.5) ;
+
+void main()
+{	
+	
+	float baseX = floor((texcoord0.x) / dotdistanceX) * dotdistanceX; 
+	float baseY = floor((texcoord0.y) / dotdistanceY) * dotdistanceY; 
+	
+	vec4 color = texture2DRect(tex0, vec2(baseX, baseY));
+
+	float grey = ( ( (color.x + color.y + color.z) / 3.0 ) * contrast + gain ) * 255. ;
+	
+	grey = clamp ( grey, 0.0, 255.0 );
+	
+	grey = 255. - grey;
+	
+	float asciinumber = float ( ( ( grey - 30. ) / 26. ) ) * float( grey > 30.);
+	
+	float distX = texcoord0.x - baseX;
+	float distY = texcoord0.y - baseY;
+	
+	float coordX = ( ( distX / dotdistanceX ) / 23.0 + ( floor(asciinumber) - 1.  ) /23.0 )  * 1380.;
+	float coordY = ( distY / dotdistanceY ) * 30.;
+
+	vec4 col = texture2DRect(tex1, vec2(coordX, coordY));
+	
+	vec4 col_inv = 1.0 - col;
+
+	vec4 result = float (1 - invert) * col + float (invert) * col_inv;
+	
+	
+	gl_FragColor = result;
+
+} 
+
+
+]]>
+		</program>
+	</language>
+</jittershader>
